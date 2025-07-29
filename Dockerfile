@@ -4,24 +4,24 @@ FROM node:20-bookworm
 # Set working directory
 WORKDIR /app
 
+# Create non-root user first
+RUN useradd -m -u 1001 playwright
+
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies as root
 RUN npm install
-
-# Install Playwright browsers with dependencies
-RUN npx playwright install --with-deps chromium
 
 # Copy application files
 COPY . .
 
-# Create non-root user for security
-RUN useradd -m -u 1001 playwright && \
-    chown -R playwright:playwright /app
+# Change ownership to playwright user
+RUN chown -R playwright:playwright /app
 
-# Switch to non-root user
+# Switch to playwright user and install browsers
 USER playwright
+RUN npx playwright install --with-deps chromium
 
 # Expose port
 EXPOSE 6623

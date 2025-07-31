@@ -9,7 +9,7 @@ async function testSimple() {
     // Launch browser
     console.log('Launching browser...');
     browser = await chromium.launch({
-      headless: true,
+      headless: false, // Run in headful mode to see what's happening
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -33,11 +33,11 @@ async function testSimple() {
       console.error(`[Browser Error] ${error.message}`);
     });
     
-    // Navigate to YouTube
+    // Navigate to YouTube - using the problematic video
     console.log('Navigating to YouTube...');
-    const videoId = 'dQw4w9WgXcQ';
+    const videoId = 'TaDUNZKL0a4'; // "Build ANYTHING With This Claude Code MCP Stack"
     await page.goto(`https://www.youtube.com/watch?v=${videoId}`, {
-      waitUntil: 'networkidle',
+      waitUntil: 'domcontentloaded',
       timeout: 30000
     });
     
